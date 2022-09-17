@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from "react";
 import Error from "./Error";
 
-const Formulario = ({ setPacientes, pacientes }) => {
+const Formulario = ({ setPacientes, pacientes, paciente, setPaciente }) => {
   const [mascota, setMascota] = useState("");
   const [propietario, setPropietario] = useState("");
   const [email, setEmail] = useState("");
   const [fecha, setFecha] = useState("");
   const [sintomas, setSintomas] = useState("");
   const [error, setError] = useState(false);
-
   /*****************
    * FUNCIONES
    *****************/
+
+  useEffect(() => {
+    if (Object.keys(paciente).length !== 0) {
+      console.log(paciente);
+      setMascota(paciente.mascota);
+      setEmail(paciente.email);
+      setFecha(paciente.fecha);
+      setPropietario(paciente.propietario);
+      setSintomas(paciente.sintomas);
+    }
+  }, [paciente]);
+
   const handleForm = (e) => {
     e.preventDefault();
 
@@ -39,11 +50,24 @@ const Formulario = ({ setPacientes, pacientes }) => {
       sintomas,
     };
 
-    //Generate an ID
-    ObjectPacient.id = generateId();
+    console.log();
 
-    //Add to pacients array
-    setPacientes([...pacientes, ObjectPacient]);
+    //Ver si está editando o no
+    if (paciente.id) {
+      ObjectPacient.id = paciente.id;
+      //Update pacient object in array
+      const arr = pacientes.map((pac) =>
+        pac.id === paciente.id ? ObjectPacient : pac
+      );
+      setPacientes(arr);
+      setPaciente({});
+    } else {
+      //Generate an ID
+      ObjectPacient.id = generateId();
+
+      //Add to pacients array
+      setPacientes([...pacientes, ObjectPacient]);
+    }
 
     //Clean inputs
     setMascota("");
@@ -146,7 +170,7 @@ const Formulario = ({ setPacientes, pacientes }) => {
         <input
           type="submit"
           className="bg-indigo-500 w-full text-white py-2  uppercase font-bold cursor-pointer"
-          value="Agregar Paciente"
+          value={paciente.id ? "Editar Paciente" : "Agregar Paciente"}
           onClick={handleForm}
         />
       </form>

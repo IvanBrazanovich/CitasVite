@@ -1,6 +1,6 @@
 import React from "react";
 
-const Paciente = ({ paciente }) => {
+const Paciente = ({ paciente, eliminarPaciente, setPaciente }) => {
   const { mascota, propietario, email, fecha, sintomas, id } = paciente;
   return (
     <div className="paciente bg-white w-full py-2 px-4 rounded-md ">
@@ -39,11 +39,13 @@ const Paciente = ({ paciente }) => {
           className="cursor-pointer uppercase text-sm font-bold px-10 py-2 bg-indigo-600 rounded-md text-white"
           type="submit"
           value="Editar"
+          onClick={() => setPaciente(paciente)}
         />
         <input
           className="cursor-pointer uppercase text-sm font-bold bg-red-600  px-10 py-2  rounded-md text-white"
           type="submit"
           value="Eliminar"
+          onClick={() => eliminarPaciente(id)}
         />
       </div>
     </div>
